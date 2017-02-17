@@ -82,6 +82,7 @@ public void testParseCmd() throws Exception {
 
 
     cmd.parseCmd(new String[]{"-classpath","classpath1","-version","MyApp","args1","args2"});
+    assertEquals(true,"".equals(cmd.getXjre()));
     assertEquals("classpath1",cmd.getCpOption());
     assertEquals(false,cmd.isHelpFlag());
     assertEquals(true,cmd.isVersionFlag());
@@ -89,11 +90,12 @@ public void testParseCmd() throws Exception {
     assertEquals("MyApp",cmd.getClassName());
     cmd.reset();
 
-    cmd.parseCmd(new String[]{"-classpath","classpath1","MyApp","-version","args1","args2"});
+    cmd.parseCmd(new String[]{"-classpath","classpath1","MyApp","-version","args1","args2","-Xjre","jreoption","args3"});
     assertEquals("classpath1",cmd.getCpOption());
     assertEquals(false,cmd.isHelpFlag());
     assertEquals(true,cmd.isVersionFlag());
-    assertEquals(true, Arrays.asList(new String[]{"args1", "args2"}).equals(Arrays.asList(cmd.getArgs())));
+    assertEquals(true,"jreoption".equals(cmd.getXjre()));
+    assertEquals(true, Arrays.asList(new String[]{"args1", "args2","args3"}).equals(Arrays.asList(cmd.getArgs())));
     assertEquals("MyApp",cmd.getClassName());
     cmd.reset();
 
