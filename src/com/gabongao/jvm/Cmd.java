@@ -108,7 +108,7 @@ public class Cmd {
     }
 
     /**
-     * 打印帮助
+     * print usage
      *
      * @param args
      */
