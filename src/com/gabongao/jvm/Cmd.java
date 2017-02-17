@@ -32,7 +32,7 @@ public class Cmd {
     boolean versionFlag = false;
     String cpOption = "";
     String className = "";
-    String Xjre = "";
+    String jreOption = "";
     String[] args;
 
     /**
@@ -60,8 +60,8 @@ public class Cmd {
         return args;
     }
 
-    public String getXjre() {
-        return Xjre;
+    public String getJreOption() {
+        return jreOption;
     }
 
     /**
@@ -73,7 +73,7 @@ public class Cmd {
         this.cpOption = "";
         this.className = "";
         this.args = null;
-        this.Xjre = "";
+        this.jreOption = "";
     }
 
     /**
@@ -88,7 +88,7 @@ public class Cmd {
         options.addOption("version", false, "print version and exit");
         options.addOption("?", "help", false, "print help message");
         options.addOption("cp", "classpath", true, "classpath");
-        options.addOption("Xjre", true, "path to jre");
+        options.addOption("jreOption", true, "path to jre");
         CommandLine commandLine = parser.parse(options, args);
         if (commandLine.hasOption("help") || commandLine.hasOption("?")) {
             this.helpFlag = true;
@@ -103,8 +103,8 @@ public class Cmd {
             this.cpOption = commandLine.getOptionValue("classpath");
         }
 
-        if (commandLine.hasOption("Xjre")) {
-            this.Xjre = commandLine.getOptionValue("Xjre");
+        if (commandLine.hasOption("jreOption")) {
+            this.jreOption = commandLine.getOptionValue("jreOption");
         }
         String[] commandLineArgs = commandLine.getArgs();
         if (commandLineArgs.length > 0) {

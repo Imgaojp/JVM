@@ -57,11 +57,6 @@ public class Entry_Dir extends Entry {
             while (-1 != (len=inputStream.read(buffer, 0, buf_size))) {
                 bos.write(buffer, 0, len);
             }
-            for (byte b:bos.toByteArray()
-                 ) {
-                System.out.printf("%x",b);
-            }
-            System.out.println();
             return bos.toByteArray();
         } catch (Exception e) {
             System.out.println("Class "+className+" not found"+" in "+absDir);

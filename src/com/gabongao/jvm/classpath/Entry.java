@@ -28,12 +28,12 @@ public abstract class Entry {
     static String pathListSeparator = System.getProperty("path.separator");//system path separator
 
     public static Entry newEntry(String path) {
-//        if (path.contains(pathListSeparator)) {
-//            return newCompositeEntry(path);
-//        }
-//        if (path.contains("*")) {
-//            return new WildcardEntry(path);
-//        }
+        if (path.contains(pathListSeparator)) {
+            return new Entry_Composite(path);
+        }
+        if (path.contains("*")) {
+            return new Entry_Wildcard(path);
+        }
         if (path.contains(".jar") || path.contains(".zip") || path.contains(".JAR") || path.contains(".ZIP")) {
             return new Entry_Zip(path);
         }

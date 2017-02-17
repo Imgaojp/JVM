@@ -47,11 +47,11 @@ public class Entry_Wildcard extends Entry {
 
         Path dir = Paths.get(baseDir);
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir)) {
-            for (Path e:stream
-                 ) {
+            for (Path e : stream
+                    ) {
                 String fileName = e.getFileName().toString();
                 if ((!e.toFile().isDirectory()) && (fileName.contains(".jar") || fileName.contains(".JAR"))) {
-                    entryList.add(new Entry_Zip(e.getParent()+"\\"+fileName));
+                    entryList.add(new Entry_Zip(e.getParent() + "\\" + fileName));
                 }
             }
         } catch (Exception e) {
@@ -59,7 +59,10 @@ public class Entry_Wildcard extends Entry {
         }
         for (Entry entry : entryList
                 ) {
-            entry.readClass(className);
+            byte[] bytes = entry.readClass(className);
+            if (bytes != null) {
+                return bytes;
+            }
         }
         return null;
     }
