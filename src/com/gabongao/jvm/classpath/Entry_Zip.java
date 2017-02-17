@@ -63,12 +63,13 @@ public class Entry_Zip extends Entry {
                             ) {
                         System.out.printf("%x",b);
                     }
+                    System.out.println();
                     return bos.toByteArray();
                 }
                 entry = jarInput.getNextJarEntry();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Class "+className+" not found"+" in "+absPath);
         }
         return null;
     }

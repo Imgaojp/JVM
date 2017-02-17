@@ -61,14 +61,19 @@ public class Entry_Dir extends Entry {
                  ) {
                 System.out.printf("%x",b);
             }
+            System.out.println();
             return bos.toByteArray();
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Class "+className+" not found"+" in "+absDir);
             try {
-                inputStream.close();
+                try {
+                    inputStream.close();
+                } catch (Exception e1) {
+                    System.out.println("inputStream does not exist");
+                }
                 bos.close();
             } catch (Exception e1) {
-                e1.printStackTrace();
+                System.out.println("bos close error");
             }
         }
         return null;
