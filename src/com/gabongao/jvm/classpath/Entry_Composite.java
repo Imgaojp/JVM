@@ -26,4 +26,13 @@ package com.gabongao.jvm.classpath;
  */
 public class Entry_Composite extends Entry {
 
+    @Override
+    public byte[] readClass(String className) {
+        return new byte[0];
+    }
+
+    @Override
+    public String toString() {
+        return null;
+    }
 }
