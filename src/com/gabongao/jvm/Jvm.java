@@ -2,6 +2,9 @@ package com.gabongao.jvm;
 
 import com.gabongao.jvm.classfile.ClassFile;
 import com.gabongao.jvm.classpath.ClassPath;
+import com.gabongao.jvm.rtda.Frame;
+import com.gabongao.jvm.rtda.LocalVars;
+import com.gabongao.jvm.rtda.OperandStack;
 
 import java.io.File;
 import java.util.Arrays;
@@ -64,6 +67,8 @@ public class Jvm {
         }
         */
 
+
+        /* ch03
         ClassPath cp = new ClassPath();
         cp.parse(cmd.jreOption, cmd.cpOption);
         String className = cmd.className.replace(".", "/").concat(".class");
@@ -90,7 +95,51 @@ public class Jvm {
         for (int i = 0; i < classFile.getMethods().length; i++) {
             System.out.printf("\t\t%s\n", classFile.getMethods()[i].getName());
         }
+        */
 
+
+        Frame frame = new Frame(100, 100);
+        testLocalVars(frame.getLocalVars());
+        testOperandStack(frame.getOperandStack());
+    }
+
+
+    private static void testLocalVars(LocalVars localVars) {
+        localVars.setInt(0, 100);
+        localVars.setInt(1, -100);
+        localVars.setInt(2, -100000);
+        localVars.setLong(3, 2997924580L);
+        localVars.setLong(5, -2997924580L);
+        localVars.setFloat(7, 3.1415926f);
+        localVars.setDouble(8, -2.7814897347028520974);
+        localVars.setRef(10, null);
+        System.out.println(localVars.getInt(0));
+        System.out.println(localVars.getInt(1));
+        System.out.println(localVars.getInt(2));
+        System.out.println(localVars.getLong(3));
+        System.out.println(localVars.getLong(5));
+        System.out.println(localVars.getFloat(7));
+        System.out.println(localVars.getDouble(8));
+        System.out.println(localVars.getRef(10));
+    }
+
+    private static void testOperandStack(OperandStack operandStack) {
+        operandStack.pushInt(100);
+        operandStack.pushInt(-100);
+        operandStack.pushInt(-100000);
+        operandStack.pushLong(2997924580L);
+        operandStack.pushLong(-2997924580L);
+        operandStack.pushFloat(3.1415926f);
+        operandStack.pushDouble(-2.7814897347028520974);
+        operandStack.pushRef(null);
+        System.out.println(operandStack.popRef());
+        System.out.println(operandStack.popDouble());
+        System.out.println(operandStack.popFloat());
+        System.out.println(operandStack.popLong());
+        System.out.println(operandStack.popLong());
+        System.out.println(operandStack.popInt());
+        System.out.println(operandStack.popInt());
+        System.out.println(operandStack.popInt());
     }
 
 }
