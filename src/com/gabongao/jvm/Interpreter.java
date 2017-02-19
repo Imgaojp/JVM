@@ -70,9 +70,6 @@ public class Interpreter {
             char opcode = (char) bytecodeReader.readInt8();
             Instruction instruction = Factory.newInstruction((byte) opcode);
             instruction.fetchOperands(bytecodeReader);
-            if (n == 13 || n == 14) {
-                System.out.printf("%d\t", bytecodeReader.getPc());
-            }
             frame.setNextPc(bytecodeReader.getPc());
             System.out.printf("pc:%2d\t inst:%s\n", pc, instruction.getClass().getName());
             instruction.execute(frame);
