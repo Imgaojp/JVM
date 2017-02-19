@@ -33,11 +33,11 @@ package com.gabongao.jvm.classfile;
  * Created by Imgaojp on 2017/2/18.
  */
 public class AttrCode implements AttributeInfo {
-    char maxStack, maxLocals;
     byte[] code;
-    ConstantPool constantPool;
-    AttributeInfo[] attributes;
-    ExceptionTableEntry[] exceptionTableEntries;
+    private char maxStack, maxLocals;
+    private ConstantPool constantPool;
+    private AttributeInfo[] attributes;
+    private ExceptionTableEntry[] exceptionTableEntries;
 
 
     public AttrCode(ConstantPool constantPool) {
@@ -52,6 +52,30 @@ public class AttrCode implements AttributeInfo {
         code = classReader.readBytes(codeLength);
         exceptionTableEntries = readExceptionTable(classReader);
         attributes = ClassFile.readAttributes(classReader, constantPool);
+    }
+
+    public char getMaxStack() {
+        return maxStack;
+    }
+
+    public char getMaxLocals() {
+        return maxLocals;
+    }
+
+    public byte[] getCode() {
+        return code;
+    }
+
+    public ConstantPool getConstantPool() {
+        return constantPool;
+    }
+
+    public AttributeInfo[] getAttributes() {
+        return attributes;
+    }
+
+    public ExceptionTableEntry[] getExceptionTableEntries() {
+        return exceptionTableEntries;
     }
 
     public ExceptionTableEntry[] readExceptionTable(ClassReader classReader) {

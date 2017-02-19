@@ -8,6 +8,8 @@
 
 package com.gabongao.jvm.rtda;
 
+import java.util.Arrays;
+
 /**
  * 　　　　　　　　┏┓　　　┏┓+ +
  * 　　　　　　　┏┛┻━━━┛┻┓ + +
@@ -89,5 +91,10 @@ public class LocalVars {
 
     public double getDouble(int index) {
         return Double.longBitsToDouble(getLong(index));
+    }
+
+    @Override
+    public String toString() {
+        return "slots:" + Arrays.asList(slots).toString();
     }
 }

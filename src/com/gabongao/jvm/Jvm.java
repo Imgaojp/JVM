@@ -1,13 +1,11 @@
 package com.gabongao.jvm;
 
 import com.gabongao.jvm.classfile.ClassFile;
+import com.gabongao.jvm.classfile.MemberInfo;
 import com.gabongao.jvm.classpath.ClassPath;
 import com.gabongao.jvm.rtda.Frame;
 import com.gabongao.jvm.rtda.LocalVars;
 import com.gabongao.jvm.rtda.OperandStack;
-
-import java.io.File;
-import java.util.Arrays;
 
 /**
  * 　　　　　　　　┏┓　　　┏┓+ +
@@ -97,12 +95,41 @@ public class Jvm {
         }
         */
 
-
+        /* ch04
         Frame frame = new Frame(100, 100);
         testLocalVars(frame.getLocalVars());
         testOperandStack(frame.getOperandStack());
+        */
+        Interpreter interpreter = new Interpreter();
+        ClassPath cp = new ClassPath();
+        cp.parse(cmd.jreOption, cmd.cpOption);
+        String className = cmd.className.replace(".", "/").concat(".class");
+        ClassFile classFile = loadClass(className, cp);
+        classFile.read();
+        MemberInfo mainMethod = getMainMethod(classFile);
+        if (mainMethod != null) {
+            interpreter.doInterpreter(mainMethod);
+        } else {
+            System.out.printf("Main method not found in class %s\n", className);
+        }
+
     }
 
+    public static MemberInfo getMainMethod(ClassFile classFile) {
+        for (MemberInfo methodInfo : classFile.getMethods()
+                ) {
+            if ("main".equals(methodInfo.getName()) && methodInfo.getDescriptor().equals("([Ljava/lang/String;)V")) {
+                return methodInfo;
+            }
+        }
+        return null;
+    }
+
+
+    public static ClassFile loadClass(String className, ClassPath classPath) {
+        byte[] classData = classPath.readClass(className);
+        return new ClassFile(classData);
+    }
 
     private static void testLocalVars(LocalVars localVars) {
         localVars.setInt(0, 100);

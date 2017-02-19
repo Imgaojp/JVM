@@ -8,6 +8,8 @@
 
 package com.gabongao.jvm.rtda;
 
+import java.util.Arrays;
+
 /**
  * 　　　　　　　　┏┓　　　┏┓+ +
  * 　　　　　　　┏┛┻━━━┛┻┓ + +
@@ -42,6 +44,14 @@ public class OperandStack {
         } else {
             throw new RuntimeException("Operands Count Error");
         }
+    }
+
+    @Override
+    public String toString() {
+        return "OperandStack{" +
+                "size=" + size +
+                ", slots=" + Arrays.toString(slots) +
+                '}';
     }
 
     public void pushInt(int val) {
@@ -101,5 +111,15 @@ public class OperandStack {
 
     public double popDouble() {
         return Double.longBitsToDouble(popLong());
+    }
+
+    public void pushSlot(Slot slot) {
+        slots[size] = slot;
+        size++;
+    }
+
+    public Slot popSlot() {
+        size--;
+        return slots[size];
     }
 }

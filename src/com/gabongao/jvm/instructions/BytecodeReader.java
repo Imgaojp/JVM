@@ -6,7 +6,7 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.gabongao.jvm.rtda;
+package com.gabongao.jvm.instructions;
 
 /**
  * 　　　　　　　　┏┓　　　┏┓+ +
@@ -32,44 +32,61 @@ package com.gabongao.jvm.rtda;
  * 　　　　　　　　　　┗┻┛　┗┻┛+ + + +
  * Created by Imgaojp on 2017/2/18.
  */
-public class Frame {
-    private Frame lower;
-    private LocalVars localVars;
-    private OperandStack operandStack;
-    private Thread thread;
-    private int nextPc;
+public class BytecodeReader {
+    private byte[] code;
+    private int pc;
 
-    public Frame(Thread thread, int maxLocals, int maxStack) {
-        this.thread = thread;
-        localVars = new LocalVars(maxLocals);
-        operandStack = new OperandStack(maxStack);
+    public void reset(byte[] code, int pc) {
+        this.code = code;
+        this.pc = pc;
     }
 
-    public LocalVars getLocalVars() {
-        return localVars;
+    public int getPc() {
+        return pc;
     }
 
-    public Thread getThread() {
-        return thread;
+    public char readUint8() {
+        byte b = code[pc];
+        pc++;
+        return (char) b;
     }
 
-    public int getNextPc() {
-        return nextPc;
+    public char readUint16() {
+//        Byte.toUnsignedInt((byte) readUint8());
+        char high = (char) (readUint8() << 8);
+        char low = readUint8();
+        char res = (char) ((high & 0xff00) | (low & 0x00ff));
+        return res;
     }
 
-    public void setNextPc(int nextPc) {
-        this.nextPc = nextPc;
+    public int readInt8() {
+        return (int) readUint8();
     }
 
-    public OperandStack getOperandStack() {
-        return operandStack;
+    public int readInt16() {
+        char uint16 = readUint16();
+        if (uint16 >> 15 == 1) {
+            return (((~(uint16 - 1)) & 0x000000007f) * -1);
+        } else {
+            return uint16;
+        }
     }
 
-    Frame getLower() {
-        return lower;
+    public int readInt32() {
+        return (((((int) readUint8()) << 24) & 0xff000000) | ((((int) readUint8()) << 16) & 0x00ff0000) | ((((int) readUint8()) << 8) & 0x0000ff00) | ((((int) readUint8())) & 0x000000ff));
     }
 
-    void setLower(Frame lower) {
-        this.lower = lower;
+    public void skipPadding() {
+        while ((pc % 4) != 0) {
+            readInt8();
+        }
+    }
+
+    public int[] readInt32s(int count) {
+        int[] ints = new int[count];
+        for (int i = 0; i < count; i++) {
+            ints[i] = readInt32();
+        }
+        return ints;
     }
 }

@@ -33,9 +33,9 @@ package com.gabongao.jvm.classfile;
  * Created by Imgaojp on 2017/2/18.
  */
 public class MemberInfo {
-    ConstantPool cp;
-    char accessFlags, nameIndex, descriptorIndex;
-    AttributeInfo[] attributes;
+    private ConstantPool cp;
+    private char accessFlags, nameIndex, descriptorIndex;
+    private AttributeInfo[] attributes;
 
 
     public MemberInfo(ClassReader classReader, ConstantPool cp) {
@@ -44,6 +44,16 @@ public class MemberInfo {
         this.nameIndex = classReader.readUint16();
         this.descriptorIndex = classReader.readUint16();
         this.attributes = ClassFile.readAttributes(classReader, cp);
+    }
+
+    public AttrCode getCodeAttribure() {
+        for (AttributeInfo attr : attributes
+                ) {
+            if (attr instanceof AttrCode) {
+                return (AttrCode) attr;
+            }
+        }
+        return null;
     }
 
     public String getName() {

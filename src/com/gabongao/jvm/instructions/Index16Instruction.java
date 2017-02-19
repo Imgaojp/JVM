@@ -6,7 +6,7 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.gabongao.jvm.rtda;
+package com.gabongao.jvm.instructions;
 
 /**
  * 　　　　　　　　┏┓　　　┏┓+ +
@@ -32,44 +32,11 @@ package com.gabongao.jvm.rtda;
  * 　　　　　　　　　　┗┻┛　┗┻┛+ + + +
  * Created by Imgaojp on 2017/2/18.
  */
-public class Frame {
-    private Frame lower;
-    private LocalVars localVars;
-    private OperandStack operandStack;
-    private Thread thread;
-    private int nextPc;
+public abstract class Index16Instruction implements Instruction {
+    private char Index;
 
-    public Frame(Thread thread, int maxLocals, int maxStack) {
-        this.thread = thread;
-        localVars = new LocalVars(maxLocals);
-        operandStack = new OperandStack(maxStack);
-    }
-
-    public LocalVars getLocalVars() {
-        return localVars;
-    }
-
-    public Thread getThread() {
-        return thread;
-    }
-
-    public int getNextPc() {
-        return nextPc;
-    }
-
-    public void setNextPc(int nextPc) {
-        this.nextPc = nextPc;
-    }
-
-    public OperandStack getOperandStack() {
-        return operandStack;
-    }
-
-    Frame getLower() {
-        return lower;
-    }
-
-    void setLower(Frame lower) {
-        this.lower = lower;
+    @Override
+    public void fetchOperands(BytecodeReader bytecodeReader) {
+        Index = bytecodeReader.readUint16();
     }
 }

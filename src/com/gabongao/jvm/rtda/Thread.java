@@ -59,4 +59,5 @@ public class Thread {
     public Frame currentFrame() {
         return stack.top();
     }
+
 }
