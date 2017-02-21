@@ -6,9 +6,10 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.gabongao.jvm.rtda;
+package com.gabongao.jvm.rtda.heap;
 
-import com.gabongao.jvm.rtda.heap.Object;
+import java.lang.*;
+import java.lang.Object;
 
 /**
  * 　　　　　　　　┏┓　　　┏┓+ +
@@ -32,46 +33,16 @@ import com.gabongao.jvm.rtda.heap.Object;
  * 　　　　　　　　　┗┓┓┏━┳┓┏┛ + + + +
  * 　　　　　　　　　　┃┫┫　┃┫┫
  * 　　　　　　　　　　┗┻┛　┗┻┛+ + + +
- * Created by Imgaojp on 2017/2/18.
+ * Created by Imgaojp on 2017/2/20.
  */
-public class Slot {
-    private int num;
-    private Object ref;
+public class Constant {
+    private java.lang.Object object;
 
-    public Slot() {
-        this.num = 0;
-        this.ref = new Object();
+    public Constant(Object object) {
+        this.object = object;
     }
 
-    @Override
-    public String toString() {
-        return "Slot{" +
-                "num=" + num +
-                ", ref=" + ref +
-                '}';
+    public Object getObject() {
+        return object;
     }
-
-    public int getNum() {
-        return num;
-    }
-
-    public void setNum(int num) {
-        this.num = num;
-    }
-
-    public Object getRef() {
-        return ref;
-    }
-
-    public void setRef(Object ref) {
-        this.ref = ref;
-    }
-
-    public Slot copySlot() {
-        Slot s = new Slot();
-        s.setNum(this.getNum());
-        s.setRef(this.getRef());
-        return s;
-    }
-
 }

@@ -8,6 +8,8 @@
 
 package com.gabongao.jvm.rtda;
 
+import com.gabongao.jvm.rtda.heap.Object;
+
 import java.util.Arrays;
 
 /**
@@ -41,6 +43,9 @@ public class OperandStack {
     public OperandStack(int maxStacks) {
         if (maxStacks > 0) {
             slots = new Slot[maxStacks];
+            for (int i = 0; i < maxStacks; i++) {
+                slots[i] = new Slot();
+            }
         } else {
             throw new RuntimeException("Operands Count Error");
         }
@@ -55,7 +60,7 @@ public class OperandStack {
     }
 
     public void pushInt(int val) {
-        slots[size] = new Slot();
+//        slots[size] = new Slot();
         slots[size].setNum(val);
         size++;
     }
@@ -66,7 +71,7 @@ public class OperandStack {
     }
 
     public void pushFloat(float val) {
-        slots[size] = new Slot();
+//        slots[size] = new Slot();
         slots[size].setNum(Float.floatToRawIntBits(val));
         size++;
     }
@@ -77,9 +82,9 @@ public class OperandStack {
     }
 
     public void pushLong(long val) {
-        slots[size] = new Slot();
+//        slots[size] = new Slot();
         slots[size].setNum((int) val);
-        slots[size + 1] = new Slot();
+//        slots[size + 1] = new Slot();
         slots[size + 1].setNum((int) (val >> 32));
         size += 2;
     }
@@ -92,7 +97,7 @@ public class OperandStack {
     }
 
     public void pushRef(Object ref) {
-        slots[size] = new Slot();
+//        slots[size] = new Slot();
         slots[size].setRef(ref);
         size++;
     }

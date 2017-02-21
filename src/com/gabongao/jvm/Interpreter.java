@@ -14,6 +14,7 @@ import com.gabongao.jvm.classfile.MemberInfo;
 import com.gabongao.jvm.instructions.*;
 import com.gabongao.jvm.rtda.Frame;
 import com.gabongao.jvm.rtda.Thread;
+import com.gabongao.jvm.rtda.heap.Method;
 
 /**
  * 　　　　　　　　┏┓　　　┏┓+ +
@@ -58,6 +59,20 @@ public class Interpreter {
         }
     }
 
+    public void doInterpreter(Method method) {
+        Thread thread = new Thread();
+        Frame frame = new Frame(thread, method);
+        thread.pushFrame(frame);
+        try {
+            loop(thread, method.getCode());
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println();
+            System.out.printf("LocalVars: %s\n", frame.getLocalVars());
+            System.out.printf("OperandStack: %s\n", frame.getOperandStack());
+        }
+    }
+
     public void loop(Thread thread, byte[] byteCode) {
         Frame frame = thread.popFrame();
         BytecodeReader bytecodeReader = new BytecodeReader();
@@ -65,13 +80,13 @@ public class Interpreter {
         for (; ; ) {
             int pc = frame.getNextPc();
             thread.setPc(pc);
-            System.out.printf("loop: %2d\t", n);
+            System.out.printf("loop: %6d\t", n);
             bytecodeReader.reset(byteCode, pc);
             char opcode = (char) bytecodeReader.readInt8();
             Instruction instruction = Factory.newInstruction((byte) opcode);
             instruction.fetchOperands(bytecodeReader);
             frame.setNextPc(bytecodeReader.getPc());
-            System.out.printf("pc:%2d\t inst:%s\n", pc, instruction.getClass().getName());
+            System.out.printf("pc:%3d\t inst:%s\n", pc, instruction.getClass().getName());
             instruction.execute(frame);
             n++;
         }

@@ -50,7 +50,7 @@ public class ConstantMemberrefInfo extends ConstantInfo {
         nameAndTypeIndex = classReader.readUint16();
     }
 
-    public String className() {
+    public String getClassName() {
         return constantPool.getClassName(classIndex);
     }
 

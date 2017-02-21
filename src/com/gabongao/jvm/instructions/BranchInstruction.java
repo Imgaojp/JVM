@@ -9,7 +9,7 @@
 package com.gabongao.jvm.instructions;
 
 import com.gabongao.jvm.rtda.Frame;
-import com.gabongao.jvm.rtda.Object;
+import com.gabongao.jvm.rtda.heap.Object;
 import com.gabongao.jvm.rtda.OperandStack;
 
 /**
@@ -48,7 +48,6 @@ public class BranchInstruction implements Instruction {
     public void execute(Frame frame) {
     }
 
-    ;
 
     public void branch(Frame frame, int offset) {
         int pc = frame.getThread().getPc();

@@ -39,6 +39,8 @@ public class ClassPath {
     }
 
     public byte[] readClass(String className) {
+
+        className = className.concat(".class");
         byte[] bytes = bootClasspath.readClass(className);
         if ( bytes!= null) {
             return bytes;

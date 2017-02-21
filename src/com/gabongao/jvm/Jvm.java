@@ -6,6 +6,9 @@ import com.gabongao.jvm.classpath.ClassPath;
 import com.gabongao.jvm.rtda.Frame;
 import com.gabongao.jvm.rtda.LocalVars;
 import com.gabongao.jvm.rtda.OperandStack;
+import com.gabongao.jvm.rtda.heap.ClassLoader;
+import com.gabongao.jvm.rtda.heap.ClassStruct;
+import com.gabongao.jvm.rtda.heap.Method;
 
 /**
  * 　　　　　　　　┏┓　　　┏┓+ +
@@ -52,11 +55,11 @@ public class Jvm {
         /* ch02
         ClassPath cp = new ClassPath();
         cp.parse(cmd.jreOption, cmd.cpOption);
-        System.out.printf("classpath: %s\tclass: %s\targs: %s\n",cmd.cpOption,cmd.className, Arrays.asList(cmd.args));
-        String className = cmd.className.replace(".", "/").concat(".class");
-        byte[] classData = cp.readClass(className);
+        System.out.printf("classpath: %s\tclass: %s\targs: %s\n",cmd.cpOption,cmd.getClassName, Arrays.asList(cmd.args));
+        String getClassName = cmd.getClassName.replace(".", "/").concat(".class");
+        byte[] classData = cp.readClass(getClassName);
         if (classData == null) {
-            System.out.printf("Could not load main class %s\n",className);
+            System.out.printf("Could not load main class %s\n",getClassName);
             System.exit(1);
         }
         for (byte b:classData
@@ -69,10 +72,10 @@ public class Jvm {
         /* ch03
         ClassPath cp = new ClassPath();
         cp.parse(cmd.jreOption, cmd.cpOption);
-        String className = cmd.className.replace(".", "/").concat(".class");
-        ClassFile classFile = new ClassFile(cp.readClass(className));
+        String getClassName = cmd.getClassName.replace(".", "/").concat(".class");
+        ClassFile classFile = new ClassFile(cp.readClass(getClassName));
         classFile.read();
-        System.out.println(cmd.className);
+        System.out.println(cmd.getClassName);
         printClassInfo(classFile);
     }
 
@@ -95,23 +98,47 @@ public class Jvm {
         }
         */
 
-        /* ch04
+        // ch04
+        /*
         Frame frame = new Frame(100, 100);
         testLocalVars(frame.getLocalVars());
         testOperandStack(frame.getOperandStack());
         */
+
+        //ch05
+
+//        Interpreter interpreter = new Interpreter();
+//        ClassPath cp = new ClassPath();
+//        cp.parse(cmd.jreOption, cmd.cpOption);
+//        String className = cmd.className.replace(".", "/").concat(".class");
+//        ClassFile classFile = loadClass(className, cp);
+//        classFile.read();
+//        MemberInfo mainMethod = getMainMethod(classFile);
+//        if (mainMethod != null) {
+//            interpreter.doInterpreter(mainMethod);
+//        } else {
+//            System.out.printf("Main method not found in class %s\n", className);
+//        }
+
+
         Interpreter interpreter = new Interpreter();
         ClassPath cp = new ClassPath();
+
+        ClassLoader classLoader = new ClassLoader(cp);
         cp.parse(cmd.jreOption, cmd.cpOption);
-        String className = cmd.className.replace(".", "/").concat(".class");
-        ClassFile classFile = loadClass(className, cp);
-        classFile.read();
-        MemberInfo mainMethod = getMainMethod(classFile);
+//        String className = cmd.className.replace(".", "/").concat(".class");
+        String className = cmd.className;
+        ClassStruct mainClass = classLoader.loadClass(className);
+        Method mainMethod = mainClass.getMainMethod();
+//        ClassFile classFile = loadClass(className, cp);
+//        classFile.read();
+//        MemberInfo mainMethod = getMainMethod(classFile);
         if (mainMethod != null) {
             interpreter.doInterpreter(mainMethod);
         } else {
             System.out.printf("Main method not found in class %s\n", className);
         }
+
 
     }
 

@@ -8,6 +8,8 @@
 
 package com.gabongao.jvm.rtda;
 
+import com.gabongao.jvm.rtda.heap.Object;
+
 import java.util.Arrays;
 
 /**
@@ -37,16 +39,19 @@ import java.util.Arrays;
 public class LocalVars {
     private Slot[] slots;
 
-    LocalVars(int maxLocals) {
-        if (maxLocals > 0) {
+    public LocalVars(int maxLocals) {
+        if (maxLocals >= 0) {
             slots = new Slot[maxLocals];
+            for (int i = 0; i < maxLocals; i++) {
+                slots[i] = new Slot();
+            }
         } else {
             throw new RuntimeException("LocalVars Count Error");
         }
     }
 
     public void setInt(int index, int val) {
-        slots[index] = new Slot();
+//        slots[index] = new Slot();
         slots[index].setNum(val);
     }
 
@@ -55,7 +60,7 @@ public class LocalVars {
     }
 
     public void setFloat(int index, float val) {
-        slots[index] = new Slot();
+//        slots[index] = new Slot();
         slots[index].setNum(Float.floatToRawIntBits(val));
     }
 
@@ -64,7 +69,7 @@ public class LocalVars {
     }
 
     public void setLong(int index, long val) {
-        slots[index] = new Slot();
+//        slots[index] = new Slot();
         slots[index].setNum((int) val);
         slots[index + 1] = new Slot();
         slots[index + 1].setNum((int) (val >> 32));
@@ -77,7 +82,7 @@ public class LocalVars {
     }
 
     public void setRef(int index, Object ref) {
-        slots[index] = new Slot();
+//        slots[index] = new Slot();
         slots[index].setRef(ref);
     }
 

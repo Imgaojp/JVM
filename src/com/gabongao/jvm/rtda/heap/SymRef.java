@@ -6,9 +6,9 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.gabongao.jvm.rtda;
+package com.gabongao.jvm.rtda.heap;
 
-import com.gabongao.jvm.rtda.heap.Object;
+import com.gabongao.jvm.classfile.ConstantClassInfo;
 
 /**
  * 　　　　　　　　┏┓　　　┏┓+ +
@@ -32,46 +32,54 @@ import com.gabongao.jvm.rtda.heap.Object;
  * 　　　　　　　　　┗┓┓┏━┳┓┏┛ + + + +
  * 　　　　　　　　　　┃┫┫　┃┫┫
  * 　　　　　　　　　　┗┻┛　┗┻┛+ + + +
- * Created by Imgaojp on 2017/2/18.
+ * Created by Imgaojp on 2017/2/20.
  */
-public class Slot {
-    private int num;
-    private Object ref;
+public class SymRef {
+    ConstantPool constantPool;
+    String className;
+    private ClassStruct classStruct;
 
-    public Slot() {
-        this.num = 0;
-        this.ref = new Object();
+    public SymRef(ConstantPool constantPool) {
+        this.constantPool = constantPool;
     }
 
-    @Override
-    public String toString() {
-        return "Slot{" +
-                "num=" + num +
-                ", ref=" + ref +
-                '}';
+    public ConstantPool getConstantPool() {
+        return constantPool;
     }
 
-    public int getNum() {
-        return num;
+    public void setConstantPool(ConstantPool constantPool) {
+        this.constantPool = constantPool;
     }
 
-    public void setNum(int num) {
-        this.num = num;
+    public String getClassName() {
+        return className;
     }
 
-    public Object getRef() {
-        return ref;
+    public void setClassName(String className) {
+        this.className = className;
     }
 
-    public void setRef(Object ref) {
-        this.ref = ref;
+    public ClassStruct getClassStruct() {
+        return classStruct;
     }
 
-    public Slot copySlot() {
-        Slot s = new Slot();
-        s.setNum(this.getNum());
-        s.setRef(this.getRef());
-        return s;
+    public void setClassStruct(ClassStruct classStruct) {
+        this.classStruct = classStruct;
     }
 
+    public ClassStruct resolvedClass() {
+        if (this.classStruct == null) {
+            resolvedClassRef();
+        }
+        return classStruct;
+    }
+
+    public void resolvedClassRef() {
+        ClassStruct d = constantPool.getClassStruct();
+        ClassStruct c = d.getClassLoader().loadClass(className);
+        if (!c.isAccessibleTo(d)) {
+            throw new RuntimeException("java.lang.IllegalAccessError");
+        }
+        classStruct = c;
+    }
 }

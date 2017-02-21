@@ -6,7 +6,7 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.gabongao.jvm.classfile;
+package com.gabongao.jvm.rtda.heap;
 
 /**
  * 　　　　　　　　┏┓　　　┏┓+ +
@@ -28,12 +28,32 @@ package com.gabongao.jvm.classfile;
  * 　　　　　　　　　┃ 　　　　　　　┣┓
  * 　　　　　　　　　┃ 　　　　　　　┏┛
  * 　　　　　　　　　┗┓┓┏━┳┓┏┛ + + + +
- * 　　　　　　　　　　┃┫┫　┃┫┫
+ * 　　　　 　　　　　　┃┫┫　┃┫┫
  * 　　　　　　　　　　┗┻┛　┗┻┛+ + + +
  * Created by Imgaojp on 2017/2/18.
  */
-public class ConstantInterfaceMemberrefInfo extends ConstantMemberrefInfo {
-    public ConstantInterfaceMemberrefInfo(ConstantPool constantPool) {
-        super(constantPool);
+public class Object {
+    private ClassStruct classStruct;
+    private Slots fields;
+    //TODO
+
+    public Object() {
+    }
+
+    public Object(ClassStruct classStruct) {
+        this.classStruct = classStruct;
+        this.fields = new Slots(classStruct.getInstanceSlotCount());
+    }
+
+    public ClassStruct getClassStruct() {
+        return classStruct;
+    }
+
+    public Slots getFields() {
+        return fields;
+    }
+
+    public boolean isInstanceOf(ClassStruct classStruct) {
+        return classStruct.isAssignableFrom(this.classStruct);
     }
 }

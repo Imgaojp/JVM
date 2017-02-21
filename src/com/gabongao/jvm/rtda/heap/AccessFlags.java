@@ -6,9 +6,7 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.gabongao.jvm.rtda;
-
-import com.gabongao.jvm.rtda.heap.Object;
+package com.gabongao.jvm.rtda.heap;
 
 /**
  * 　　　　　　　　┏┓　　　┏┓+ +
@@ -32,46 +30,35 @@ import com.gabongao.jvm.rtda.heap.Object;
  * 　　　　　　　　　┗┓┓┏━┳┓┏┛ + + + +
  * 　　　　　　　　　　┃┫┫　┃┫┫
  * 　　　　　　　　　　┗┻┛　┗┻┛+ + + +
- * Created by Imgaojp on 2017/2/18.
+ * Created by Imgaojp on 2017/2/20.
  */
-public class Slot {
-    private int num;
-    private Object ref;
+public enum AccessFlags {
+    ACCESS_PUBLIC(0X0001),              //class field method
+    ACCESS_PRIVATE(0X0002),             //      field method
+    ACCESS_PROTECTED(0X0004),           //      field method
+    ACCESS_STATIC(0X0008),              //      field method
+    ACCESS_FINAL(0X0010),               //class field method
+    ACCESS_SUPER(0X0020),               //class
+    ACCESS_SYNCHRONIZED(0X0020),        //            method
+    ACCESS_VOLATILE(0X0040),            //      field
+    ACCESS_BRIDGE(0X0040),              //            method
+    ACCESS_TRANSIENT(0X0080),           //      field
+    ACCESS_VARARGS(0X0080),             //            method
+    ACCESS_NATIVE(0X0100),              //            method
+    ACCESS_INTERFACE(0X0200),           //class
+    ACCESS_ABSTRACT(0X0400),            //class       method
+    ACCESS_STRICT(0X0800),              //            method
+    ACCESS_SYNTHETIC(0X1000),           //class field method
+    ACCESS_ANNOTATION(0X2000),          //class
+    ACCESS_ENUM(0X4000),                //class field
+    ;
+    private int value;
 
-    public Slot() {
-        this.num = 0;
-        this.ref = new Object();
+    AccessFlags(int value) {
+        this.value = value;
     }
 
-    @Override
-    public String toString() {
-        return "Slot{" +
-                "num=" + num +
-                ", ref=" + ref +
-                '}';
+    public int getValue() {
+        return value;
     }
-
-    public int getNum() {
-        return num;
-    }
-
-    public void setNum(int num) {
-        this.num = num;
-    }
-
-    public Object getRef() {
-        return ref;
-    }
-
-    public void setRef(Object ref) {
-        this.ref = ref;
-    }
-
-    public Slot copySlot() {
-        Slot s = new Slot();
-        s.setNum(this.getNum());
-        s.setRef(this.getRef());
-        return s;
-    }
-
 }

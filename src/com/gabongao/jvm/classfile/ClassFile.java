@@ -33,30 +33,30 @@ package com.gabongao.jvm.classfile;
  * Created by Imgaojp on 2017/2/18.
  */
 public class ClassFile {
-    static final int CONSTANT_Class = 7;
-    static final int CONSTANT_Fieldref = 9;
-    static final int CONSTANT_Methodref = 10;
-    static final int CONSTANT_InterfaceMethodref = 11;
-    static final int CONSTANT_String = 8;
-    static final int CONSTANT_Integer = 3;
-    static final int CONSTANT_Float = 4;
-    static final int CONSTANT_Long = 5;
-    static final int CONSTANT_Double = 6;
-    static final int CONSTANT_NameAndType = 12;
-    static final int CONSTANT_Utf8 = 1;
     static final int CONSTANT_MethodHandle = 15;
     static final int CONSTANT_MethodType = 16;
     static final int CONSTANT_InvokeDynamic = 18;
-    char majorVersion;
-    ConstantPool constantPool;
-    char accessFlags;
-    char thisClass;
-    char superClass;
-    char[] interfaces;
-    MemberInfo[] fields;
-    MemberInfo[] methods;
-    AttributeInfo[] attributes;
-    ClassReader classReader;
+    private static final int CONSTANT_Class = 7;
+    private static final int CONSTANT_Fieldref = 9;
+    private static final int CONSTANT_Methodref = 10;
+    private static final int CONSTANT_InterfaceMethodref = 11;
+    private static final int CONSTANT_String = 8;
+    private static final int CONSTANT_Integer = 3;
+    private static final int CONSTANT_Float = 4;
+    private static final int CONSTANT_Long = 5;
+    private static final int CONSTANT_Double = 6;
+    private static final int CONSTANT_NameAndType = 12;
+    private static final int CONSTANT_Utf8 = 1;
+    private char majorVersion;
+    private ConstantPool constantPool;
+    private char accessFlags;
+    private char thisClass;
+    private char superClass;
+    private char[] interfaces;
+    private MemberInfo[] fields;
+    private MemberInfo[] methods;
+    private AttributeInfo[] attributes;
+    private ClassReader classReader;
     private char minorVersion;
 
     public ClassFile(byte[] classData) {
@@ -107,6 +107,7 @@ public class ClassFile {
     public void read() {
         readAndCheckMagic();
         readAndCheckVersion();
+        constantPool = new ConstantPool();
         constantPool = readConstantPool();
         accessFlags = classReader.readUint16();
         thisClass = classReader.readUint16();
@@ -136,16 +137,17 @@ public class ClassFile {
 
     public ConstantPool readConstantPool() {
         int cpCount = classReader.readUint16();
+//        constantPool.constantInfos = new ConstantInfo[cpCount];
         ConstantInfo[] constantInfos = new ConstantInfo[cpCount];
+//        ConstantPool cp = new ConstantPool();
         for (int i = 1; i < cpCount; i++) {
             constantInfos[i] = readConstantInfo();
             if (constantInfos[i] instanceof ConstantLongInfo || constantInfos[i] instanceof ConstantDoubleInfo) {
                 i++;
             }
         }
-        ConstantPool cp = new ConstantPool();
-        cp.setConstantInfos(constantInfos);
-        return cp;
+        constantPool.setConstantInfos(constantInfos);
+        return constantPool;
     }
 
     public ConstantInfo readConstantInfo() {
@@ -176,7 +178,7 @@ public class ClassFile {
             case CONSTANT_Methodref:
                 return new ConstantMethodrefInfo(constantPool);
             case CONSTANT_InterfaceMethodref:
-                return new ConstantInterfaceMemberrefInfo(constantPool);
+                return new ConstantInterfaceMethodrefInfo(constantPool);
             case CONSTANT_NameAndType:
                 return new ConstantNameAndTypeInfo();
 //            case CONSTANT_MethodType:
@@ -223,12 +225,16 @@ public class ClassFile {
         return "";
     }
 
+    //todo:return null
     public String[] interfaceNames() {
-        String[] interfaceNames = new String[interfaces.length];
-        for (int i = 0; i < interfaces.length; i++) {
-            interfaceNames[i] = constantPool.getClassName(interfaces[i]);
+        if ((interfaces != null)) {
+            String[] interfaceNames = new String[interfaces.length];
+            for (int i = 0; i < interfaces.length; i++) {
+                interfaceNames[i] = constantPool.getClassName(interfaces[i]);
+            }
+            return interfaceNames;
         }
-        return interfaceNames;
+        return null;
     }
 
 

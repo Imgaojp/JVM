@@ -6,7 +6,10 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.gabongao.jvm.rtda;
+package com.gabongao.jvm.rtda.heap;
+
+import com.gabongao.jvm.classfile.ConstantClassInfo;
+import com.gabongao.jvm.classfile.ConstantMemberrefInfo;
 
 /**
  * 　　　　　　　　┏┓　　　┏┓+ +
@@ -30,8 +33,23 @@ package com.gabongao.jvm.rtda;
  * 　　　　　　　　　┗┓┓┏━┳┓┏┛ + + + +
  * 　　　　　　　　　　┃┫┫　┃┫┫
  * 　　　　　　　　　　┗┻┛　┗┻┛+ + + +
- * Created by Imgaojp on 2017/2/18.
+ * Created by Imgaojp on 2017/2/20.
  */
-public class Object {
-    //TODO
+public class MemberRef extends SymRef {
+    protected String name, descriptor;
+
+    public MemberRef(ConstantPool constantPool, ConstantMemberrefInfo memberrefInfo) {
+        super(constantPool);
+        super.setClassName(memberrefInfo.getClassName());
+        name = memberrefInfo.nameAndDescriptor()[0];
+        descriptor = memberrefInfo.nameAndDescriptor()[1];
+    }
+
+    public String getDescriptor() {
+        return descriptor;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

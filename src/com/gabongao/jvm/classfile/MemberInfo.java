@@ -46,6 +46,16 @@ public class MemberInfo {
         this.attributes = ClassFile.readAttributes(classReader, cp);
     }
 
+    public AttrConstantValue getConstantValueAttribute() {
+        for (AttributeInfo attr : attributes
+                ) {
+            if (attr instanceof AttrConstantValue) {
+                return (AttrConstantValue) attr;
+            }
+        }
+        return null;
+    }
+
     public AttrCode getCodeAttribure() {
         for (AttributeInfo attr : attributes
                 ) {

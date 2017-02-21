@@ -37,6 +37,7 @@ public class Factory {
     static OperandsInstruction operandsInstruction = new OperandsInstruction();
     static BranchInstruction branchInstruction = new BranchInstruction();
     static Index8Instruction index8Instruction = new Index8Instruction();
+    static Index16Instruction index16Instruction = new Index16Instruction();
 
     public static Instruction newInstruction(byte opcode) {
         switch (Byte.toUnsignedInt(opcode)) {
@@ -76,12 +77,12 @@ public class Factory {
                 return operandsInstruction.new Bipush();
             case 0x11:
                 return operandsInstruction.new Sipush();
-            //case 0x12:
-            //	return &LDC{}
-            //case 0x13:
-            //	return &LDC_W{}
-            //case 0x14:
-            //	return &LDC2_W{}
+            case 0x12:
+                return index8Instruction.new Ldc();
+            case 0x13:
+                return index8Instruction.new Ldc().new Ldc_W();
+            case 0x14:
+                return index8Instruction.new Ldc().new Ldc2_W();
             case 0x15:
                 return index8Instruction.new Iload();
             case 0x16:
@@ -403,26 +404,26 @@ public class Factory {
 //                return areturn
 //            case 0xb1:
 //                return _return
-            //case 0xb2:
-            //	return &GET_STATIC{}
-            //case 0xb3:
-            //	return &PUT_STATIC{}
-            //case 0xb4:
-            //	return &GET_FIELD{}
-            //case 0xb5:
-            //	return &PUT_FIELD{}
-            //case 0xb6:
-            //	return &INVOKE_VIRTUAL{}
-            //case 0xb7:
-            //	return &INVOKE_SPECIAL{}
+            case 0xb2:
+                return index16Instruction.new GetStatic();
+            case 0xb3:
+                return index16Instruction.new PutStatic();
+            case 0xb4:
+                return index16Instruction.new GetField();
+            case 0xb5:
+                return index16Instruction.new PutField();
+            case 0xb6:
+                return index16Instruction.new InvokeVirtual();
+            case 0xb7:
+                return index16Instruction.new InvokeSpecial();
             //case 0xb8:
             //	return &INVOKE_STATIC{}
             //case 0xb9:
             //	return &INVOKE_INTERFACE{}
             //case 0xba:
             //	return &INVOKE_DYNAMIC{}
-            //case 0xbb:
-            //	return &NEW{}
+            case 0xbb:
+                return index16Instruction.new New();
             //case 0xbc:
             //	return &NEW_ARRAY{}
             //case 0xbd:
@@ -431,10 +432,10 @@ public class Factory {
             //	return arraylength
             //case 0xbf:
             //	return athrow
-            //case 0xc0:
-            //	return &CHECK_CAST{}
-            //case 0xc1:
-            //	return &INSTANCE_OF{}
+            case 0xc0:
+                return index16Instruction.new CheckCast();
+            case 0xc1:
+                return index16Instruction.new InstanceOf();
             //case 0xc2:
             //	return monitorenter
             //case 0xc3:
@@ -461,6 +462,5 @@ public class Factory {
             default:
                 throw new RuntimeException(String.format("Bad opcode: 0X%X", opcode));
         }
-
     }
 }

@@ -6,9 +6,9 @@
  * Vestibulum commodo. Ut rhoncus gravida arcu.
  */
 
-package com.gabongao.jvm.rtda;
+package com.gabongao.jvm.rtda.heap;
 
-import com.gabongao.jvm.rtda.heap.Object;
+import com.gabongao.jvm.classfile.*;
 
 /**
  * 　　　　　　　　┏┓　　　┏┓+ +
@@ -32,46 +32,51 @@ import com.gabongao.jvm.rtda.heap.Object;
  * 　　　　　　　　　┗┓┓┏━┳┓┏┛ + + + +
  * 　　　　　　　　　　┃┫┫　┃┫┫
  * 　　　　　　　　　　┗┻┛　┗┻┛+ + + +
- * Created by Imgaojp on 2017/2/18.
+ * Created by Imgaojp on 2017/2/20.
  */
-public class Slot {
-    private int num;
-    private Object ref;
+public class FieldRef extends MemberRef {
+    private Field field;
 
-    public Slot() {
-        this.num = 0;
-        this.ref = new Object();
+    public FieldRef(ConstantPool constantPool, ConstantMemberrefInfo memberrefInfo) {
+        super(constantPool, memberrefInfo);
     }
 
-    @Override
-    public String toString() {
-        return "Slot{" +
-                "num=" + num +
-                ", ref=" + ref +
-                '}';
+    public Field resolvedField() {
+        if (field == null) {
+            resolveFieldRef();
+        }
+        return field;
     }
 
-    public int getNum() {
-        return num;
+    public void resolveFieldRef() {
+        ClassStruct d = constantPool.getClassStruct();
+        ClassStruct c = resolvedClass();
+        field = lookupField(c, name, descriptor);
+        if (field == null) {
+            throw new RuntimeException("NoSuchFieldError");
+        }
+        if (!field.isAccessibleTo(d)) {
+            throw new RuntimeException("IllegalAccessError");
+        }
     }
 
-    public void setNum(int num) {
-        this.num = num;
+    public Field lookupField(ClassStruct c, String name, String descriptor) {
+        for (Field f : c.getFields()
+                ) {
+            if (f.getName().equals(name) && f.descriptor.equals(descriptor)) {
+                return f;
+            }
+        }
+        for (ClassStruct cs : c.getInterfaces()
+                ) {
+            Field field = lookupField(cs, name, descriptor);
+            if (field != null) {
+                return field;
+            }
+        }
+        if (c.getSuperClass() != null) {
+            return lookupField(c.getSuperClass(), name, descriptor);
+        }
+        return null;
     }
-
-    public Object getRef() {
-        return ref;
-    }
-
-    public void setRef(Object ref) {
-        this.ref = ref;
-    }
-
-    public Slot copySlot() {
-        Slot s = new Slot();
-        s.setNum(this.getNum());
-        s.setRef(this.getRef());
-        return s;
-    }
-
 }

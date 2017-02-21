@@ -8,6 +8,8 @@
 
 package com.gabongao.jvm.rtda;
 
+import com.gabongao.jvm.rtda.heap.Method;
+
 /**
  * 　　　　　　　　┏┓　　　┏┓+ +
  * 　　　　　　　┏┛┻━━━┛┻┓ + +
@@ -37,12 +39,24 @@ public class Frame {
     private LocalVars localVars;
     private OperandStack operandStack;
     private Thread thread;
+    private Method method;
     private int nextPc;
 
     public Frame(Thread thread, int maxLocals, int maxStack) {
         this.thread = thread;
         localVars = new LocalVars(maxLocals);
         operandStack = new OperandStack(maxStack);
+    }
+
+    public Frame(Thread thread, Method method) {
+        this.thread = thread;
+        this.method = method;
+        this.localVars = new LocalVars(method.getMaxLocals());
+        this.operandStack = new OperandStack(method.getMaxStack());
+    }
+
+    public Method getMethod() {
+        return method;
     }
 
     public LocalVars getLocalVars() {

@@ -10,7 +10,9 @@ package com.gabongao.jvm.instructions;
 
 import com.gabongao.jvm.rtda.Frame;
 import com.gabongao.jvm.rtda.LocalVars;
-import com.gabongao.jvm.rtda.Object;
+import com.gabongao.jvm.rtda.OperandStack;
+import com.gabongao.jvm.rtda.heap.ConstantPool;
+import com.gabongao.jvm.rtda.heap.Object;
 
 /**
  * 　　　　　　　　┏┓　　　┏┓+ +
@@ -685,4 +687,55 @@ public class Index8Instruction implements Instruction {
             localVars.setInt(super.getIndex(), localVars.getInt(super.getIndex()) + constVal);
         }
     }
+
+    public class Ldc extends Index8Instruction {
+        @Override
+        public void execute(Frame frame) {
+            _ldc(frame, super.getIndex());
+        }
+
+        public void _ldc(Frame frame, int index) {
+            OperandStack operandStack = frame.getOperandStack();
+            ConstantPool cp = frame.getMethod().getClassMember().getClassStruct().getConstantPool();
+            java.lang.Object c = cp.getConstant(index).getObject();
+            if (c instanceof Integer) {
+                operandStack.pushInt((int) c);
+            } else if (c instanceof Float) {
+                operandStack.pushFloat((float) c);
+            } else {
+                throw new RuntimeException("todo : ldc");
+            } //todo
+        }
+    }
+
+    public class Ldc_W extends Ldc {
+        @Override
+        public void execute(Frame frame) {
+            super.execute(frame);
+        }
+
+        @Override
+        public void fetchOperands(BytecodeReader bytecodeReader) {
+            Index = bytecodeReader.readUint16();
+        }
+    }
+
+    public class Ldc2_W extends Ldc_W {
+        @Override
+        public void execute(Frame frame) {
+            OperandStack operandStack = frame.getOperandStack();
+            ConstantPool cp = frame.getMethod().getClassMember().getClassStruct().getConstantPool();
+            java.lang.Object c = cp.getConstant(Index).getObject();
+            if (c instanceof Long) {
+                operandStack.pushLong((long) c);
+            } else if (c instanceof Double) {
+                operandStack.pushDouble((double) c);
+            } else {
+                throw new RuntimeException("ClassFormatError");
+            }
+        }
+    }
+
+
+
 }

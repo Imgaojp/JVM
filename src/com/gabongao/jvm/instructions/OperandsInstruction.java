@@ -42,7 +42,6 @@ import sun.awt.OSInfo;
 public class OperandsInstruction implements Instruction {
     @Override
     public void fetchOperands(BytecodeReader bytecodeReader) {
-        //TODO
     }
 
     public void execute(Frame frame) {
@@ -294,9 +293,15 @@ public class OperandsInstruction implements Instruction {
         public void execute(Frame frame) {
             OperandStack operandStack = frame.getOperandStack();
             Slot slot = operandStack.popSlot();
+            Slot slot1 = slot.copySlot();
             operandStack.pushSlot(slot);
-            operandStack.pushSlot(slot);
+            operandStack.pushSlot(slot1);
         }
+
+        //todo:dup 指令传入两个相同的引用，要先拷贝一份。
+//        Slot slot = operandStack.popSlot();
+//        operandStack.pushSlot(slot);
+//        operandStack.pushSlot(slot);
     }
 
     public class Dup_X1 extends OperandsInstruction {
@@ -307,7 +312,7 @@ public class OperandsInstruction implements Instruction {
             Slot slot2 = operandStack.popSlot();
             operandStack.pushSlot(slot1);
             operandStack.pushSlot(slot2);
-            operandStack.pushSlot(slot1);
+            operandStack.pushSlot(slot1.copySlot());
         }
     }
 
@@ -321,7 +326,7 @@ public class OperandsInstruction implements Instruction {
             operandStack.pushSlot(slot1);
             operandStack.pushSlot(slot3);
             operandStack.pushSlot(slot2);
-            operandStack.pushSlot(slot1);
+            operandStack.pushSlot(slot1.copySlot());
         }
     }
 
@@ -334,7 +339,7 @@ public class OperandsInstruction implements Instruction {
             operandStack.pushSlot(slot2);
             operandStack.pushSlot(slot1);
             operandStack.pushSlot(slot2);
-            operandStack.pushSlot(slot1);
+            operandStack.pushSlot(slot1.copySlot());
         }
     }
 
@@ -348,8 +353,8 @@ public class OperandsInstruction implements Instruction {
             operandStack.pushSlot(slot2);
             operandStack.pushSlot(slot1);
             operandStack.pushSlot(slot3);
-            operandStack.pushSlot(slot2);
-            operandStack.pushSlot(slot1);
+            operandStack.pushSlot(slot2.copySlot());
+            operandStack.pushSlot(slot1.copySlot());
         }
     }
 
@@ -365,8 +370,8 @@ public class OperandsInstruction implements Instruction {
             operandStack.pushSlot(slot1);
             operandStack.pushSlot(slot4);
             operandStack.pushSlot(slot3);
-            operandStack.pushSlot(slot2);
-            operandStack.pushSlot(slot1);
+            operandStack.pushSlot(slot2.copySlot());
+            operandStack.pushSlot(slot1.copySlot());
         }
     }
 
