@@ -267,7 +267,7 @@ public class OperandsInstruction implements Instruction {
 
         @Override
         public void execute(Frame frame) {
-            frame.getOperandStack().pushInt((int) val);
+            frame.getOperandStack().pushInt((short) val);
         }
     }
 
